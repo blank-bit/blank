@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct node
 {
@@ -14,7 +15,7 @@ void traverse(NODEPTR l, FUNPTR callback)
 
     while (p != NULL)
     {
-        callback(&p->data);
+        callback(&p->data);//回调
         p = p->next;
     }
 }
@@ -26,11 +27,17 @@ void square(int *v) { *v *= *v; }
 int main()
 {
     NODE a = {1, NULL}, b = {2, NULL}, c = {3, NULL}, d = {4, NULL};
-    NODEPTR head = &a;
+    NODEPTR head = &a , p;
 
     a.next = &b;
     b.next = &c;
     c.next = &d;
+
+    p = (NODEPTR)malloc(sizeof(NODE));
+    p->data = 5;
+    p->next = NULL;
+
+    d.next = p;
 
     traverse(head, print); putchar('\n');
 
@@ -38,5 +45,7 @@ int main()
 
     traverse(head, square); traverse(head, print); putchar('\n');
 
+    free(p);
+    
     return 0;
 }

@@ -3,7 +3,7 @@
 //加密
 int main()
 {
-    char a[1024],b[1024];
+    char a[32],b[32];
     char *p , *t;
     p = a;
     t = b;
