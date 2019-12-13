@@ -59,5 +59,28 @@ char pop(void)
 
 int main()
 {
+    printf("Enter parentheses and/or braces:");
+    char c , t;
+    while((c = getchar()) != '\n')
+    {
+        if(c == '}' || c == ']' || c == ')')
+        {
+            if(top - 1 < 0)
+                printf("Not");
+            else 
+                t = contents[top-1];
+
+            if((t == '[' && c != ']') ||(t == '{' && c != '}') || (t == '(' && c != ')'))
+                printf("Not");
+            else if((t == '{' && c == '}') || (t == '[' && c == ']') || (t == '(' && c == ')'))
+                pop();            
+        }
+        if (c == '{' || c == '[' || c == '(')
+            push(c);
+    }
+
+    if(top == 0)
+        printf("Yes");
+
     return 0;
 }
