@@ -37,7 +37,7 @@ typedef struct
     void f() {} //f函数的类型是：void ()
     void g(value_pointer) {} //g函数的类型是：void (value_pointer)
     int h(value)pointer) {}  //h函数的类型是：int (value_pointer)
-    那么，指针p只能只想函数g，因为g的类型与p的基类型相同
+    那么，指针p只能指向函数g，因为g的类型与p的基类型相同
     指向的方法有两种：
     1. 赋值： f = g;  f(); //等同于g()
     2. 作为函数参数，参见list_traverse
@@ -80,7 +80,7 @@ nodeptr make_node(value_pointer vp)
     nodeptr p = (nodeptr)malloc(sizeof(node));
     p->data = *vp;
     p->next = NULL;
-
+    
     return p;
 }
 
@@ -268,7 +268,7 @@ void list_save_to_file(listptr l, const char *filename)
 {
     FILE *fp;
 
-    fp = fopen(filename ,"wt");
+    fp = fopen(filename ,"rt");
     if (fp == NULL) // if (!fp)
     {
         printf("Cannot open file %s.", filename);

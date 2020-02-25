@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
 
 #define MAX_NAME 20
 #define MAX_ID   20
@@ -28,25 +29,25 @@ typedef struct
     size_t size;
 } list, *listptr;
 
-listptr l = NULL;
+int count = 0;
 
-void Init();
-void MainMenu();
+void Init(listptr l);
+void MainMenu(listptr l);
 void head();
-void MenuSelect();
-void ReadData();
-void SaveData();
-void Quit();
+void MenuSelect(listptr l);
+void ReadData(listptr l);
+void SaveData(listptr l);
+void Quit(listptr l);
 void Lessons_Information();
-void Show_Information();
-void Add_Information();
-void Sort_Information();
-void Change_Information();
-void Delete_Information();
-void Search_Information();
+void Show_Information(listptr l);
+void Add_Information(listptr l);
+void Sort_Information(listptr l);
+void Change_Information(listptr l);
+void Delete_Information(listptr l);
+void Search_Information(listptr l);
 
 
-void Init()
+void Init(listptr l)
 {
 	l = (listptr)malloc(sizeof(list));
 	l->head = NULL;
@@ -62,7 +63,7 @@ void head()
 	printf("\n\n\n");
 }
 
-void MainMenu()
+void MainMenu(listptr l)
 {
 	head();
 	printf("\t\t\t\t   ╭═════════════════════════════════○●○●═══╮\n");
@@ -80,10 +81,10 @@ void MainMenu()
 	printf("\t\t\t\t   │                                            │\n");
 	printf("\t\t\t\t   └────────────────────────────────────────────┘\n");
 	printf("\t\t\t\t\t\t  请您选择(0-7):");
-	MenuSelect();
+	MenuSelect(l);
 }
 
-void Quit()
+void Quit(listptr l)
 {
 	char c;
 	c = getchar();
@@ -91,49 +92,44 @@ void Quit()
 	c = getchar();
 	if (c == 0x1b)	//esc键按下
 	{
-		SaveData();
+		SaveData(l);
 		exit(1);
 	}
 	//重新进入主菜单
-	MainMenu();
+	MainMenu(l);
 
 }
 
-void MenuSelect()
+void MenuSelect(listptr l)
 {
 	char c;
 	c = getchar();
-	while(c < '0' || c > '7')
-	{
-		printf("请您重新选择：");
-		c = getchar();
-	}
 
 	switch (c)
 	{
 	case '0': exit(1);
-	case '1': Lessons_Information();
-		Quit();
+	case '1': Lessons_Information(l);
+		Quit(l);
 		break;
-	case '2': Show_Information();
-		Quit();
+	case '2': Show_Information(l);
+		Quit(l);
 		break;
-	case '3': Add_Information();
-		Quit();
+	case '3': Add_Information(l);
+		Quit(l);
 		break;
-	case '4': Sort_Information();
-		Quit();
+	case '4': Sort_Information(l);
+		Quit(l);
 		break;
-	case '5': Change_Information();
-		Quit();
+	case '5': Change_Information(l);
+		Quit(l);
 		break;
-	case '6': Delete_Information();
-		Quit();
+	case '6': Delete_Information(l);
+		Quit(l);
 		break;
-	case '7': Search_Information();
-		Quit();
+	case '7': Search_Information(l);
+		Quit(l);
 		break;
-	default:  MainMenu();
+	default: MainMenu(l);
 	}
 }
 
@@ -160,14 +156,12 @@ void Lessons_Information()
 	printf("\t\t\t╚════════════╝════════════╝════════════╝════════════╝════════════╝\n");
 }
 
-void ReadData()
+void ReadData(listptr l)
 {
 	Student stu;
 	FILE *fp;
 	nodeptr p , q;
 	q = l->head;
-	l->head = q->next;
-	q = q->next;
 	if ((fp = fopen(STUDENT_FILE_NAME, "r")) == NULL) {
     if ((fp = fopen(STUDENT_FILE_NAME, "w")) == NULL) {
         printf("文件%s创建失败。", STUDENT_FILE_NAME);
@@ -182,25 +176,23 @@ void ReadData()
 			fscanf(fp, "\t%d\n", &stu.Score);
             p = (nodeptr)malloc(sizeof(node));
             p->data = stu;
-			p->next = NULL;
             q->next = p;
             q = p;
-            (l->size)++;
+            count++;
         }
     }
     fclose(fp);
 }
 
-void Show_Information()
+void Show_Information(listptr l)
 {
 	head();
-	ReadData();
+	ReadData(l);
 	nodeptr p ; 
 	p = l->head;
-	l->head = p->next;
-	p = p->next;//指向第一个节点 如果链表为 NULL p为 NULL
+	p = p->next;	//指向第一个节点 如果链表为 NULL p为 NULL
 	int index = 1;
-	printf("\t\t\t**********************本名单共有 %ld 名学生*********************\n\n\n", l->size);
+	printf("\t\t\t**********************本名单共有 %d 名学生*********************\n\n\n", count);
 	printf("\t\t\t序号\t学号\t姓名\t高数\t英语\t程序设计\t总分\n\n");
 	while (p != NULL)	//遍历输出所有学生
 	{
@@ -212,14 +204,14 @@ void Show_Information()
 	printf("\n\n\n");	
 }
 
-void Add_Information()
+void Add_Information(listptr l)
 {
 	head();
 	nodeptr pNew , q;
 	// q = l->head;
 	/************添加学生信息***********/
 	pNew = (nodeptr)malloc(sizeof(node));
-	if(!(l->head))//链表为空
+	if(!l)//链表为空
 		l->head = pNew;
 	else
 	{
@@ -240,10 +232,10 @@ void Add_Information()
 	printf("\n\t\t\t\t\t\t程序设计:");
 	scanf("%d", &pNew->data.Program);
 	pNew->data.Score = pNew->data.English + pNew->data.Math + pNew->data.Program;
-	SaveData();
+	SaveData(l);
 }
 
-void SaveData()
+void SaveData(listptr l)
 {
 	FILE *fp;
 	if ((fp = fopen(STUDENT_FILE_NAME, "r")) == NULL) {
@@ -255,8 +247,6 @@ void SaveData()
 	}
 	nodeptr p;
 	p = l->head;
-	// l->head = p->next;
-	// p = p->next;
 	while(p != NULL)
 	{
 		fprintf(fp, "%s", p->data.Name);
@@ -270,12 +260,10 @@ void SaveData()
 	fclose(fp);	
 }
 
-void Sort_Information()
+void Sort_Information(listptr l)
 {
 	nodeptr p , q;
 	p = l->head;
-	// l->head = p->next;
-	// p = p->next;
 	if(!l)
 		printf("\n\n\n\n\n\t\t\t\t没有数据！！");
 	else {
@@ -291,10 +279,10 @@ void Sort_Information()
 				}
 			}
 	}
-	Show_Information();
+	Show_Information(l);
 }
 
-void Change_Information()
+void Change_Information(listptr l)
 {
 	head();
 	char ID[MAX_ID];
@@ -303,9 +291,7 @@ void Change_Information()
 	printf("\t\t\t\t\t\t请输入学生学号：");
 	scanf("%s", ID);
 	//遍历学生信息
-	nodeptr p = l->head;
-	// l->head = p->next;
-	// p = p->next;	//指向第一个节点 如果链表为 NULL p为 NULL
+	nodeptr p = l->head;	//指向第一个节点 如果链表为 NULL pCurrent为 NULL
 	while (p != NULL)	//遍历所有学生
 	{
 		if (strcmp(p->data.Number, ID) == 0)
@@ -344,7 +330,7 @@ void Change_Information()
 	printf("\n\n\n\n\t\t\t\t\t   没有找到要查询的学生信息......\n\n");
 }
 
-void Delete_Information()
+void Delete_Information(listptr l)
 {
 	head();
 	char ID[MAX_ID];
@@ -353,13 +339,10 @@ void Delete_Information()
 	printf("\t\t\t\t\t\t请输入学生学号：");
 	scanf("%s", ID);
 	//遍历学生信息
-	nodeptr p = l->head;
-	// l->head = p->next;
-	// p = p->next; 	//指向头结点 
+	nodeptr p = l->head;	//指向头结点 
 	while (p->next != NULL)	//遍历输出所有学生
 	{
 		nodeptr q = p->next;
-		p->next = q;
 		if (strcmp(q->data.Number, ID) == 0)
 		{
 			//信息库里面有要删除的学生信息
@@ -374,7 +357,7 @@ void Delete_Information()
 				//删除学生信息
 				p->next = q->next;	
 				free(q);
-				(l->size)--;
+				count--;
 				printf("\n\n\n\t\t\t\t\t删除成功...\n\n");
 				return;
 			}
@@ -388,7 +371,7 @@ void Delete_Information()
 	printf("\n\n\n\n\t\t\t\t\t   没有找到要删除的学生信息......\n\n");
 }
 
-void Search_Information()
+void Search_Information(listptr l)
 {
 	head();
 	char ID[MAX_ID];
@@ -397,9 +380,7 @@ void Search_Information()
 	printf("\t\t\t\t\t\t请输入学生学号：");
 	scanf("%s", ID);
 	//遍历学生信息
-	nodeptr p = l->head;
-	l->head = p->next;
-	p = p->next;	//指向第一个节点 如果链表为 NULL p为 NULL
+	nodeptr p = l->head;	//指向第一个节点 如果链表为 NULL pCurrent为 NULL
 	while (p != NULL)	//遍历所有学生
 	{
 		if (strcmp(p->data.Number, ID) == 0)
@@ -420,7 +401,8 @@ void Search_Information()
 
 int main()
 {
-	Init();
-	MainMenu();
+	list l;
+	Init(&l);
+	MainMenu(&l);
 	return 0;
 }
