@@ -11,7 +11,7 @@ void print(ElemType *e)
 
 ElemType reverse_i(LListPtr L, int i)
 {
-    Nodeptr p , q;
+    NodePtr p , q;
     int k;
 
     for(k = 1, p = L; k < i; ++i , p = p->next);
