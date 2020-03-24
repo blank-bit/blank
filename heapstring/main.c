@@ -6,7 +6,7 @@ int main()
 {
     String s, t;
 
-    StrSet(&s, "Hollo, world!");
+    StrSet(&s, "Hello, world!");
     StrSet(&t, "Aloha!");
 
     StrPrint(&s);
@@ -16,9 +16,12 @@ int main()
     putchar('\n');
 
     //StrCopy(&s, &t);
-    StrInsert(&s , 6, &t);
-    StrPrint(&s);
-    putchar('\n');
+    // StrInsert(&s, 6, &t);
+    // StrPrint(&s);
+    // putchar('\n');
+
+    StrDestroy(&s);
+    StrDestroy(&t);
 
     return 0;
 }
