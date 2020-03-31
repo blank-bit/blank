@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <malloc.h>
 
 #include "list.h"
 #include "list_interface.h"
@@ -6,16 +7,10 @@
 void InitList(LListPtr *L)
 {
     (*L) = (NodePtr)malloc(sizeof(Node)); //生成头结点
-    (*L)->next = (*L)->prior = NULL; //头结点的指针域为空
+    (*L)->prior = (*L)->next = NULL; //头结点的指针域为空
 }
 
 //请根据教材自行完成下列函数的编码
-void InitList(LListPtr *L)
-{
-    (*L) = (NodePtr)malloc(sizeof(Node)); //生成头结点
-    (*L)->next = NULL; //头结点的指针域为空
-}
-
 bool InsList(LListPtr L, int i, ElemType e)
 {
 	NodePtr p = L, s;
@@ -34,13 +29,29 @@ bool InsList(LListPtr L, int i, ElemType e)
 		return false;
 	}
 
-    s = (NodePtr)malloc(sizeof(Node));   /*申请一个新的结点S */
+	s = (NodePtr)malloc(sizeof(Node));   /*申请一个新的结点S */
 	s->data = e;                       /*值e置入s的数据域*/
-	s->prior = p->prior;
-	p->prior->next = s;
-	s->next = p;
-	p->prior = s;
+	if (p->next == NULL) //p指向最后一个元素
+	{
+		p->next = s;
+		s->next = NULL;
+		s->prior = p;
+	}
+	else
+	{
+		p = p->next; //因为是在节点前插入，因此需要再前进一步
+
+		s->prior = p->prior;
+		p->prior->next = s;
+		s->next = p;
+		p->prior = s;
+	}
 	
+    return true;
+}
+
+bool DelList(LListPtr L, int i, ElemType *e)
+{
     return true;
 }
 

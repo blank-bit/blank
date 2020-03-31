@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "list.h"
-#include "list_interface.h"
 
 void print(ElemType *e)
 {
@@ -11,14 +10,14 @@ void print(ElemType *e)
 
 int main()
 {
-    LList list;
+    LList list, *L = &list;
 
-    InitList(&list);
+    InitList(&L);
     
     for (int i = 1; i < 10; ++i)
-        InsList(&list, i, i + 10);
+        InsList(L, i, i + 10);
 
-    traverse(&list, print);
+    traverse(L, print);
     printf("\n");
 
     return 0;

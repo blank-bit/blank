@@ -11,29 +11,14 @@ void print(ElemType *e)
 
 ElemType reverse_i(LListPtr L, int i)
 {
-    NodePtr p , q;
+    NodePtr p, q;
     int k;
 
-    for(k = 1, p = L; k < i; ++i , p = p->next);
-    for(q = L; p != NULL; p = p->next, q = q->next);
+    for (k = 0, p = L; k < i; p = p->next, ++k);
+    for (q = L; p != L; p = p->next, q = q->next);
 
     return q->data;
 }
-
-// int main()
-// {
-//     LList list, *L = &list;
-
-//     InitList(&L);
-    
-//     for (int i = 1; i < 10; ++i)
-//         InsList(L, i, i + 10);
-
-//     traverse(L, print);
-//     printf("\n");
-
-//     return 0;
-// }
 
 int main()
 {

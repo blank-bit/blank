@@ -196,7 +196,8 @@ int compute_reverse_polish_notation(char* str)
         default:
             push(&S, atoi(p));
             z = atoi(p);
-            while (z / 10 != 0) {
+            while (z / 10 != 0) 
+            {
                 p++;
                 z /= 10;
             }
