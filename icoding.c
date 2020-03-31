@@ -105,3 +105,105 @@ void lnk_merge(LinkList A, LinkList B, LinkList C)
     free(A);
     free(B);
 }
+
+#include "list.h" // 请不要删除，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+bool init_queue(LinkQueue* LQ)
+{
+    (*LQ) = (LinkQueue)malloc(sizeof(LinkQueueNode));
+    if (*LQ) {
+        (*LQ)->next = *LQ;
+        return true;
+    } else
+        return false;
+}
+
+bool enter_queue(LinkQueue* LQ, ElemType x)
+{
+    LinkQueue p;
+    p = (LinkQueue)malloc(sizeof(LinkQueueNode));
+    if (p) {
+        p->data = x;
+        p->next = (*LQ)->next;
+        (*LQ)->next = p;
+        (*LQ) = p;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool leave_queue(LinkQueue* LQ, ElemType* x)
+{
+    LinkQueue p;
+    p = (*LQ)->next;
+    LinkQueue q = p->next;
+    if (p == *LQ)
+        return false;
+    if (q == *LQ) {
+        *x = q->data;
+        p->next = q->next;
+        free(q);
+        *LQ = p;
+    } else {
+        *x = q->data;
+        p->next = q->next;
+        free(q);
+        return true;
+    }
+}
+#include "list.h" // 请不要删除，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+int compute_reverse_polish_notation(char* str)
+{
+    Stack S;
+    init_stack(&S);
+    char* p = str;
+    int x, y, z, result;
+    while (*p != '\0') {
+        switch (*p) {
+        case ' ':
+            break;
+        case '+':
+            pop(&S, &x);
+            pop(&S, &y);
+            push(&S, y + x);
+            break;
+        case '-':
+            pop(&S, &x);
+            pop(&S, &y);
+            push(&S, y - x);
+            break;
+        case '*':
+            pop(&S, &x);
+            pop(&S, &y);
+            push(&S, y * x);
+            break;
+        case '/':
+            pop(&S, &x);
+            pop(&S, &y);
+            push(&S, y / x);
+            break;
+        case '%':
+            pop(&S, &x);
+            pop(&S, &y);
+            push(&S, y % x);
+            break;
+        default:
+            push(&S, atoi(p));
+            z = atoi(p);
+            while (z / 10 != 0) {
+                p++;
+                z /= 10;
+            }
+            break;
+        }
+        p++;
+    }
+    pop(&S, &result);
+    return result;
+}
