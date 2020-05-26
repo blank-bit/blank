@@ -208,3 +208,84 @@ int compute_reverse_polish_notation(char* str)
     pop(&S, &result);
     return result;
 }
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "dsstring.h" //请不要删除，否则检查不通过
+
+int str_compare(const char* ptr1, const char* ptr2)
+{
+    while(ptr1 && ptr2)
+    {
+        if(ptr1 == ptr2 || ptr1)
+    }
+
+}
+
+#define BLOCK_SIZE 4    // 可由用户定义的块大小
+#define BLS_BLANK '#'   // 用于空白处的补齐字符
+
+typedef struct _block {
+    char ch[BLOCK_SIZE];    //块的数据域
+    struct _block *next;    //块的指针域
+} Block;
+
+typedef struct {
+    Block *head;        // 串的头指针
+    Block *tail;        // 串的尾指针
+    int len;            // 串的当前长度
+} BLString;
+
+//字符串初始化函数：
+void blstr_init(BLString *T) {
+    T->len = 0;
+    T->head = NULL;
+    T->tail = NULL;
+}
+
+#include <stdlib.h>
+#include <stdio.h>
+#include "dsstring.h" // 请不要删除，否则检查不通过
+
+bool blstr_substr(BLString src, int pos, int len, BLString *sub) 
+{
+    if (src.len == 0) return false;
+    
+
+}
+
+bool path(BiTNode* root, BiTNode* node, Stack* s)
+{
+    BiTree T = root, p;
+    if (T == NULL || node == NULL || !is_empty(s))
+        return false;
+    while (T || !is_empty(s)) {
+        while (T) {
+            push(s, T);
+            if (T == node)
+                return true;
+            T = T->left;
+        }
+        top(s, &T);
+        if (!T->right || T->right == p) {
+            p = T;
+            pop(s, &T);
+            T = NULL;
+        } else
+            T = T->right;
+    }
+    return false;
+}
+
+BiTNode* nearest_ancestor(BiTree root, BiTNode* p, BiTNode* q)
+{
+    Stack A, B;
+    init_stack(&A);
+    init_stack(&B);
+    path(root, p, &A);
+    path(root, q, &B);
+    int i;
+    for (i = 0; i <= A.top && i <= B.top && A.elem[i] == B.elem[i]; ++i)
+        ;
+    return A.elem[i - 1];
+}
