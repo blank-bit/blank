@@ -291,3 +291,4 @@ BiTNode* nearest_ancestor(BiTree root, BiTNode* p, BiTNode* q)
 }
 
 
+//同步测试
