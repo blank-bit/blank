@@ -289,6 +289,3 @@ BiTNode* nearest_ancestor(BiTree root, BiTNode* p, BiTNode* q)
         ;
     return A.elem[i - 1];
 }
-
-
-//同步测试
