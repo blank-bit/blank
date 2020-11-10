@@ -1,3 +1,11 @@
+/*********************************************
+ * @Author       : Mr.Wang
+ * @Date         : 2020-11-10 18:42:31
+ * @LastEditTime : 2020-11-10 18:43:35
+ * @LastEditors  : Do not edit
+ * @FilePath     : /DS/HuffmanTree/Huffman.c
+ * @Description  : message
+ *********************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,6 +28,7 @@ static void Select(HuffmanTree ht, int n, int *s1, int *s2)
             min = i;
     *s2 = min;
 }
+
 
 void CreateHuffmanTree(HuffmanTree ht, int *w, int n)
 {
