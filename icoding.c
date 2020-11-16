@@ -9,10 +9,10 @@ typedef struct _seqlist SeqList;
 void odd_even(SeqList *L) 
 {
     int i = 0 ,j = L->last - 1;
-    int temp;
+              int temp;
     while(i < j)
     {
-        while(L->elem[i] % 2 != 0) i++;
+                   while(L->elem[i] % 2 != 0) i++;
         while(L->elem[j] % 2 == 0) j--;
         temp = L->elem[i];
         L->elem[i] = L->elem[j];
