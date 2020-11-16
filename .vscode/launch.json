@@ -5,6 +5,34 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "CodeLens (Launch) - hello",
+            "request": "launch",
+            "mainClass": "Java.Hello.hello",
+            "projectName": "blank_7a0193e"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Attach)",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": "<debug port of the debuggee>"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Gamestart",
+            "request": "launch",
+            "mainClass": "Java.Score.Gamestart",
+            "projectName": "blank_7a0193e"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - GameStar",
+            "request": "launch",
+            "mainClass": "Java.Score.GameStar",
+            "projectName": "blank_7a0193e"
+        },
+        {
             "name": "gcc-8 build and debug active file",
             "type": "cppdbg",
             "request": "launch",

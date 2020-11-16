@@ -1,21 +1,9 @@
-/*********************************************
- * @Author       : Mr.Wang
- * @Date         : 2020-11-10 18:42:31
- * @LastEditTime : 2020-11-10 18:55:37
- * @LastEditors  : Do not edit
- * @FilePath     : /DS/HuffmanTree/Huffman.c
- * @Description  : message
- *********************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "Huffman.h"
-/*********************************************
- * @description: 
- * @param {*}
- * @return {*}
- *********************************************/
+
 static void Select(HuffmanTree ht, int n, int *s1, int *s2)
 {
     int i, min;
