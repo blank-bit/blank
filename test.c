@@ -4,26 +4,21 @@
  @FilePath     : /test.c
  @Description  : message
 *********************************************/
-void producer()
+#include "stdio.h"
+#include "math.h"
+
+int main()
 {
-    do
-    {
-        … produce an item in nextp；
-            Wait(mutex) ；(Wait(empty) ；)
-                Wait(empty) ；(Wait(mutex) ；)
-                    Buffer(in) ： = nextp；(in： = (in + 1) mod n；)
-                        Signal(mutex) ；(signal(full) ；)
-    } while (TRUE);
-}
-void consumer()
-{
-    do
-    {
-        Wait(mutex) ；(Wait(full) ；)
-            Wait(full) ；(Wait(mutex) ；)
-                Nextc： = buffer(out) ；
-                    Out： = out + 1；(Out： = (out + 1) mod n；)
-                                      Signal(mutex) ；(signal(empty) ；)
-                                          Consume item in nextc；
-    } while (TRUE);
+    int x = 54;
+    int e = 2;
+    int t;
+    // t = x / 10 ^ (e - 1);
+    // x %= 10 ^ (e - 1);
+    t = pow(10,2);
+    x %= 10;
+    printf("%d %d\n", t, x);
+
+    t = x / 10 ^ (e - 1);
+    x %= 10 ^ (e - 1);
+    printf("%d %d", t, x);
 }
