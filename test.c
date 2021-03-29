@@ -14,11 +14,12 @@ int main()
     int t;
     // t = x / 10 ^ (e - 1);
     // x %= 10 ^ (e - 1);
-    t = pow(10,2);
+    t = pow(10, 2);
     x %= 10;
     printf("%d %d\n", t, x);
 
     t = x / 10 ^ (e - 1);
     x %= 10 ^ (e - 1);
     printf("%d %d", t, x);
+    return 0;
 }
