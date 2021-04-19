@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
-#include <time.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <semaphore.h>
@@ -10,32 +8,27 @@
 #define true 1
 #define producerNum 3
 #define consumerNum 4
-#define sleepTime 3
+#define sleepTime 1
 
-typedef int semaphore;
 typedef int item;
+
+int in = 0, out = 0, proCount = 0;
+char str[N][11] = {};
+sem_t mutex, empty, full;
 item buffer[N] = {0};
-int in = 0;
-int out = 0;
-int proCount = 0;
-char str[N][10] = {};
-semaphore mutex = 1, empty = N, full = 0;
 FILE *fp;
 
 void *producer(void *a)
 {
     while (true)
     {
-        while (empty <= 0) //是否有空缓冲区
+        if (sem_wait(&empty) == -1) //是否有空缓冲区
         {
             printf("缓冲区已满！\n");
             sleep(1);
         }
-        empty--;
 
-        while (mutex <= 0) //判断缓冲区是否在被访问
-            ;
-        mutex--;
+        sem_wait(&mutex);
 
         if (fscanf(fp, "%s ", str[in]) == EOF)
         {
@@ -49,8 +42,8 @@ void *producer(void *a)
         buffer[in] = proCount;
         in = (in + 1) % N;
 
-        full++;
-        mutex++;
+        sem_post(&full);
+        sem_post(&mutex);
         sleep(sleepTime);
     }
 }
@@ -59,28 +52,25 @@ void *consumer(void *b)
 {
     while (true)
     {
-        while (full <= 0) //缓冲区是否有产品
+        if (sem_wait(&full) == -1) //缓冲区是否有产品
         {
             printf("缓冲区为空！\n");
             sleep(2);
         }
-        full--;
 
-        while (mutex <= 0)
-            ;
-        mutex--;
+        sem_wait(&mutex);
 
         int nextc = buffer[out];
-        int temp = out;
+        int t = out;
 
         buffer[out] = 0; //消费完将缓冲区设置为0
         out = (out + 1) % N;
 
-        empty++;
+        sem_post(&empty);
 
-        printf("\t\t\t\t消费一个产品ID%d,缓冲区位置为%d,内容为%s\n", nextc, out, str[temp]);
+        printf("\t\t\t\t\t消费一个产品ID%d,缓冲区位置为%d,内容为%s\n", nextc, out, str[t]);
 
-        mutex++;
+        sem_post(&mutex);
 
         sleep(sleepTime);
     }
@@ -91,6 +81,10 @@ int main()
     fp = fopen("./data.txt", "r");
     if (fp == NULL)
         exit(1);
+
+    sem_init(&mutex, 0, 1);
+    sem_init(&empty, 0, N);
+    sem_init(&full, 0, 0);
 
     pthread_t threadPool[producerNum + consumerNum];
     int i;
@@ -120,10 +114,14 @@ int main()
     {
         if (pthread_join(threadPool[i], NULL) == -1)
         {
-            printf("fail to recollect.\n");
+            printf("ERROR, fail to recollect.\n");
             exit(1);
         }
     } //运行线程池
+
+    sem_destroy(&mutex);
+    sem_destroy(&empty);
+    sem_destroy(&full);
 
     fclose(fp);
 
