@@ -6,8 +6,8 @@
 
 #define N 10
 #define true 1
-#define producerNum 100
-#define consumerNum 3
+#define producerNum 3
+#define consumerNum 4
 #define sleepTime 1
 
 typedef int item;
@@ -61,14 +61,14 @@ void *consumer(void *b)
         sem_wait(&mutex);
 
         int nextc = buffer[out];
-        int temp = out;
+        int t = out;
 
         buffer[out] = 0; //消费完将缓冲区设置为0
         out = (out + 1) % N;
 
         sem_post(&empty);
 
-        printf("\t\t\t\t\t消费一个产品ID%d,缓冲区位置为%d,内容为%s\n", nextc, out, str[temp]);
+        printf("\t\t\t\t\t消费一个产品ID%d,缓冲区位置为%d,内容为%s\n", nextc, out, str[t]);
 
         sem_post(&mutex);
 
