@@ -1,7 +1,7 @@
 /*********************************************
  @Author       : Mr.Wang
- @Date         : 2021-04-12 16:38:45
- @FilePath     : /test2.c
+ @Date         : 2021-04-19 21:09:01
+ @FilePath     : /Experience/experience1.c
  @Description  : message
 *********************************************/
 #include <stdio.h>
@@ -16,55 +16,68 @@
 
 sem_t chopsticks[N];
 
-int philosophers[N] = {1, 2, 3, 4, 5};
+int philosophers[N] = {0, 1, 2, 3, 4};
 
 void *philosopher(void *arg)
 {
     int i = *(int *)arg;
     int left = i;
-    int right;
-    if (i != N)
+    int right = (i + 1) % N;
+
+    char str;
+    switch (i)
     {
-        right = i + 1;
+    case 0:
+        str = 'A';
+        break;
+    case 1:
+        str = 'B';
+        break;
+    case 2:
+        str = 'C';
+        break;
+    case 3:
+        str = 'D';
+        break;
+    case 4:
+        str = 'E';
+        break;
     }
-    else
-    {
-        right = 1;
-    }
+
     while (1)
     {
         if (i % 2 == 0)
         {
-            printf("Philosopher %d is thinking.\n", i);
+            printf("Philosopher %c is thinking.\n", str);
             sleep(3);
 
             sem_wait(&chopsticks[right]);
-            printf("Philosopher %d fetches chopstick %d\n", i, right);
+            printf("Philosopher %c fetches chopstick %d\n", str, right + 1);
             sem_wait(&chopsticks[left]);
-            printf("Philosopher %d fetches chopstick %d\n", i, left);
-            printf("Philosopher %c is eating.\n", i);
+            printf("Philosopher %c fetches chopstick %d\n", str, left + 1);
+            printf("Philosopher %c is eating.\n", str);
             sleep(3);
             sem_post(&chopsticks[left]);
-            printf("Philosopher %d release chopstick %d\n", i, left);
+            printf("Philosopher %c release chopstick %d\n", str, left + 1);
             sem_post(&chopsticks[right]);
-            printf("Philosopher %d release chopstick %d\n", i, right);
+            printf("Philosopher %c release chopstick %d\n", str, right + 1);
         }
 
         else
         {
-            printf("Philosopher %d is thinking.\n", i);
+            printf("Philosopher %c is thinking.\n", str);
             sleep(3);
 
             sem_wait(&chopsticks[left]);
-            printf("Philosopher %d fetches chopstick %d\n", i, left);
+            printf("Philosopher %c fetches chopstick %d\n", str, left + 1);
             sem_wait(&chopsticks[right]);
-            printf("Philosopher %d fetches chopstick %d\n", i, right);
-            printf("Philosopher %d is eating.\n", i);
+            printf("Philosopher %c fetches chopstick %d\n", str, right + 1);
+            printf("Philosopher %c is eating.\n", str);
             sleep(3);
             sem_post(&chopsticks[left]);
-            printf("Philosopher %d release chopstick %d\n", i, left);
+            printf("Philosopher %c release chopstick %d\n", str, left + 1);
             sem_post(&chopsticks[right]);
-            printf("Philosopher %c release chopstick %d\n", i, right);
+            printf("Philosopher %c release chopstick %d\n", str, right + 1);
         }
     }
 }

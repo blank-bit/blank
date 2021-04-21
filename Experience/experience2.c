@@ -18,7 +18,7 @@ sem_t mutex, empty, full;
 item buffer[N] = {0};
 FILE *fp;
 
-void *producer(void *a)
+void *producer()
 {
     while (true)
     {
@@ -48,7 +48,7 @@ void *producer(void *a)
     }
 }
 
-void *consumer(void *b)
+void *consumer()
 {
     while (true)
     {
