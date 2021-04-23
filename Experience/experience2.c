@@ -80,7 +80,10 @@ int main()
 {
     fp = fopen("./data.txt", "r");
     if (fp == NULL)
+    {
+        printf("文件为空或文件不存在！\n");
         exit(1);
+    }
 
     sem_init(&mutex, 0, 1);
     sem_init(&empty, 0, N);
