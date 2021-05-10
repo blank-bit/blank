@@ -1,0 +1,34 @@
+#!/bin/sh
+###
+# @Author       : Mr.Wang
+# @Date         : 2021-05-10 15:53:21
+# @FilePath     : /Experience/experience5.sh
+# @Description  : message
+###
+if [ $# -ne 1 ]; then
+    echo 'Usage:usr_monitor username'
+    exit 0
+fi
+
+u_input=$1
+uname=$(who | cut -d ' ' -f 1)
+sleeptime=5
+
+echo "You will monitor [$u_input]\n"
+
+echo "Current user list is:"
+echo "$uname\n"
+
+compare=$(echo $uname | grep "${u_input}")
+
+echo "result=$compare"
+
+while [ "$compare" = "" ]
+do
+	echo "waiting user [$u_input] ..."
+	sleep $sleeptime
+	uname=$(who | cut -d ' ' -f 1)
+	compare=$(echo $uname | grep "${u_input}")
+done
+
+echo "[$u_input] is log on"
