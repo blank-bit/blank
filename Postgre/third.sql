@@ -254,3 +254,12 @@
 -- CREATE TRIGGER up_audit_trigger
 -- BEFORE UPDATE OR DELETE ON STUDENT
 -- FOR EACH ROW EXECUTE PROCEDURE up_audit();
+-- CREATE OR REPLACE FUNCTION Count1()
+-- RETURNS integer AS $$
+-- DECLARE
+--     count integer;
+-- BEGIN 
+--     select count(*) into count from GRADE where CID = '2021042420001' and Score < 60 ;
+--     RETURN count;
+-- END;
+-- $$ language plpgsql;
