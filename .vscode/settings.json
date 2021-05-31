@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "semaphore.h": "c",
-        "test.C": "cpp"
-    }
+        "test.C": "cpp",
+        "typeinfo": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

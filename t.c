@@ -1,3 +1,7 @@
+/*copy.h*/
+#ifndef _COPY_H_
+#define _COPY_H_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,6 +28,11 @@ void read_write(void);                                           /*拷贝文件�
 void mkdir_newdir(const char *);                                 /*为目标创建空目录*/
 void get_allpath(char *, char *, const char *, const char *);    /*获取source与target的绝对路径*/
 void init_allpath(char *, char *, char *, char *, const char *); /*清空存储路径与文件名的缓冲区并重新赋值*/
+
+#endif
+
+/*copy.c*/
+#include <copy.h>
 
 /*
 *将读source与写target的文件描述读定义成全局变量
@@ -86,7 +95,6 @@ void get_allpath(char *buf_old, char *buf_new, const char *old_path, const char 
     getcwd(buf_new, PATH_SIZE);
     strcat(buf_new, "/");
 }
-
 void init_allpath(char *buf_old, char *buf_new, char *buf_oldfile, char *buf_newfile, const char *name)
 {
     /*清空source与target的带文件名的绝对路径缓冲区*/
@@ -99,7 +107,6 @@ void init_allpath(char *buf_old, char *buf_new, char *buf_oldfile, char *buf_new
     strcpy(buf_newfile, buf_new);
     strcat(buf_newfile, name);
 }
-
 void mkdir_newdir(const char *new_path)
 {
     /*目录不存在返回NULL，则创建空目录*/
@@ -111,7 +118,6 @@ void mkdir_newdir(const char *new_path)
             sys_err("mkdir newdir");
     }
 }
-
 void deal_copy(const char *old_file, const char *pathname)
 {
     struct stat get_message;
@@ -131,7 +137,6 @@ void deal_copy(const char *old_file, const char *pathname)
     close(fd[0]);
     close(fd[1]);
 }
-
 void read_write(void)
 {
     char buf[BUF_SIZE] = {};
@@ -145,6 +150,15 @@ void read_write(void)
     }
 }
 
+/******
+*文件名：main.c
+*时间：2017/2/18-19:57
+*功能：实现简单的目录文件拷贝
+*限定测试格式：mycp -r source target或：mycp -R source target
+*局限性：不能使用正则，功能有限
+******/
+
+#include <copy.h>
 int main(int argc, char **argv)
 {
     if (argc != 4)
