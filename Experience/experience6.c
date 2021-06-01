@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     if (argc != 3)
     {
         printf("too few or lost parameter!\n");
-        exit(EXIT_FAILURE);
+        exit(1);
     }
 
     struct stat get_message;
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
         if (strcmp(argv[1], argv[2]) == 0)
         {
             printf("The same filename of parameter is error!\n");
-            exit(EXIT_FAILURE);
+            exit(1);
         }
         deal_copy(argv[1], argv[2]);
     }
@@ -96,9 +96,9 @@ void deal_dir(const char *old_path, const char *new_path)
             strcpy(buf_newfile, buf_new);
             strcat(buf_newfile, ret_redir->d_name);
 
-            if ((ret_redir->d_type & DT_REG) == DT_REG) //如果读到的文件是普通文件则复制
+            if (ret_redir->d_type == DT_REG) //如果读到的文件是普通文件则复制
                 deal_copy(buf_oldfile, buf_newfile);
-            else if ((ret_redir->d_type & DT_DIR) == DT_DIR) //如果读到的是目录则递归处理目录
+            else if (ret_redir->d_type == DT_DIR) //如果读到的是目录则递归处理目录
                 deal_dir(buf_oldfile, buf_newfile);
         }
     }
