@@ -1,94 +1,73 @@
 /*********************************************
  @Author       : Mr.Wang
- @Date         : 2021-06-01 16:56:43
+ @Date         : 2021-06-02 19:21:59
  @FilePath     : /1.c
  @Description  : message
 *********************************************/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <dirent.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <errno.h>
-int copy(char *in, char *out);
-int copydir(char *in1, char *out1);
-int main(int argc, char *argv[])
+#include <S3C2440.H>
+
+#define rGPBCON (*(volatile unsigned *)0x56000010) //Port B control
+#define rGPBDAT (*(volatile unsigned *)0x56000014) //Port B data
+#define rGPBUP (*(volatile unsigned *)0x56000018)  //Pull-up control B
+
+#define LED1_ON (rGPBDAT &= ~(1 << 5)) //GPB5 位清0
+#define LED1_OFF (rGPBDAT |= (1 << 5)) //GPB5 位置1
+#define LED2_ON (rGPBDAT &= ~(1 << 6))
+#define LED2_OFF (rGPBDAT |= (1 << 6))
+#define LED3_ON (rGPBDAT &= ~(1 << 7))
+#define LED3_OFF (rGPBDAT |= (1 << 7))
+#define LED4_ON (rGPBDAT &= ~(1 << 8))
+#define LED4_OFF (rGPBDAT |= (1 << 8))
+
+void delay(void)
 {
-    if (argc != 3)
+    int i, j;
+    for (i = 0; i < 10000; i++)
     {
-        printf("error");
-        return -1;
-    }
-    struct stat buf;
-    struct stat buf1;
-    if (lstat(argv[1], &buf) < 0)
-    {
-        printf("error");
-        return -1;
-    }
-    if (lstat(argv[1], &buf1) < 0)
-    {
-        printf("error");
-        return -1;
-    }
-    if (S_ISREG(buf1.st_mode))
-    {
-        copy(argv[1], argv[2]);
-        return 0;
-    }
-    if (S_ISDIR(buf1.st_mode))
-    {
-        copydir(argv[1], argv[2]);
-        return 0;
+        for (j = 0; j < 50; j++)
+            ;
     }
 }
-int copy(char *in, char *out)
+
+int Main()
 {
-    char buffer[1024];
-    int fd = open(in, O_RDONLY);
-    int fd1 = open(out, O_WRONLY | O_CREAT);
-    int len = read(fd, &buffer, sizeof(buffer));
-    write(fd1, buffer, len);
-    close(fd);
-    close(fd1);
-    return 0;
-}
-int copydir(char *in1, char *out1)
-{
-    mkdir(out1, 0777);
-    struct dirent *srcdirent = NULL;
-    char newsrcPath[4096];
-    char newdestPath[4096];
-    DIR *srcdir = opendir(in1);
-    while (srcdirent = readdir(srcdir))
+    rGPBCON &= ~((3 << 10) | (3 << 12) | (3 << 14) | (3 << 16)); //对GPBCON[10:17]清零
+    // rGPBCON |= ((1 << 10) | (1 << 12) | (1 << 14) | (1 << 16));  //设置GPB5~8为输出
+    rGPBCON = 0x155551;                                     //设置GPB5~8为输出
+    rGPBUP &= ~((1 << 5) | (1 << 6) | (1 << 7) | (1 << 8)); //设置GPB5~8的上拉功能
+    rGPBDAT |= (1 << 5) | (1 << 6) | (1 << 7) | (1 << 8);   //关闭LED
+
+    while (1)
     {
-        if (!strcmp(srcdirent->d_name, ".") || !strcmp(srcdirent->d_name, ".."))
-            continue;
+        if ((rGPBDAT & 0x01) = 0x01)
+        {
+            LED1_ON;
+            delay();
+            LED1_OFF;
+            LED2_ON;
+            delay();
+            LED2_OFF;
+            LED3_ON;
+            delay();
+            LED3_OFF;
+            LED4_ON;
+            delay();
+            LED4_OFF;
+        }
         else
         {
-            memset(newsrcPath, 0, 1024);
-            memset(newdestPath, 0, 1024);
-            strcpy(newsrcPath, in1);
-            strcat(newsrcPath, "/");
-            strcat(newsrcPath, srcdirent->d_name);
-            strcpy(newdestPath, out1);
-            strcat(newdestPath, "/");
-            strcat(newdestPath, srcdirent->d_name);
-
-            if ((srcdirent->d_type & DT_DIR) == DT_DIR)
-            {
-                printf("%s\n", newdestPath);
-                printf("%s\n", newsrcPath);
-                copydir(newsrcPath, newdestPath);
-            }
-            else
-            {
-                printf("22");
-                copy(newsrcPath, newdestPath);
-            }
+            LED4_ON;
+            delay();
+            LED4_OFF;
+            LED3_ON;
+            delay();
+            LED3_OFF;
+            LED2_ON;
+            delay();
+            LED2_OFF;
+            LED1_ON;
+            delay();
+            LED1_OFF;
         }
     }
     return 0;

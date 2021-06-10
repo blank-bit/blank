@@ -3,7 +3,7 @@
 # @Author       : Mr.Wang
 # @Date         : 2021-05-10 14:37:55
 # @FilePath     : /Experience/experience4.sh
-# @Description  : message
+# @Description  : 操作系统实验4
 ###
 clear
 echo 'begin test'

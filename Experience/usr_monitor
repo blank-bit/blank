@@ -2,12 +2,12 @@
 ###
 # @Author       : Mr.Wang
 # @Date         : 2021-05-10 15:53:21
-# @FilePath     : /Experience/experience5.sh
-# @Description  : message
+# @FilePath     : /Experience/usr_monitor
+# @Description  : 操作系统实验5
 ###
 if [ $# -ne 1 ]; then
-    echo 'Usage:usr_monitor username'
-    exit 0
+	echo 'Usage:usr_monitor username'
+	exit 0
 fi
 
 u_input=$1
@@ -23,8 +23,7 @@ compare=$(echo $uname | grep "${u_input}")
 
 echo "result=$compare"
 
-while [ "$compare" = "" ]
-do
+while [ "$compare" = "" ]; do
 	echo "waiting user [$u_input] ..."
 	sleep $sleeptime
 	uname=$(who | cut -d ' ' -f 1)

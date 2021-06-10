@@ -2,7 +2,7 @@
  @Author       : Mr.Wang
  @Date         : 2021-04-19 21:09:01
  @FilePath     : /Experience/experience1.c
- @Description  : message
+ @Description  : 操作系统实验1
 *********************************************/
 #include <stdio.h>
 #include <stdlib.h>

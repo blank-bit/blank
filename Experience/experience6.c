@@ -1,3 +1,9 @@
+/*********************************************
+ @Author       : Mr.Wang
+ @Date         : 2021-06-02 19:28:01
+ @FilePath     : /Experience/experience6.c
+ @Description  : 操作系统实验6
+*********************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,7 +20,7 @@
 
 //0664权限:所有者和组成员具有读写的权限，其他人只有读权限
 #define FILE_MODE 0664
-#define DIR_MODE 0664
+#define DIR_MODE 0755
 
 void deal_dir(const char *, const char *);  //处理目录
 void deal_copy(const char *, const char *); //处理文件
