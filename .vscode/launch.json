@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Launch test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "blank_7a0193e"
+        },
+        {
             "name": "gcc-8 - 生成和调试活动文件",
             "type": "cppdbg",
             "request": "launch",

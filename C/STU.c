@@ -25,18 +25,25 @@
 *
 ******************************************************************************/
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define MAX_NAME 20
-#define MAX_ID   20
-#define STUDENT_FILE_NAME "student.dat"
+#define MAX_ID 20
+#define STUDENT_FILE_NAME "student.txt"
 
 typedef enum Menu
 {
-	Exit,Lessons,Show,Add,Sort,Change,Delete,Search
-}MENU;//用有实际意义的标签来替换数字0-7
+	Exit,
+	Lessons,
+	Show,
+	Add,
+	Sort,
+	Change,
+	Delete,
+	Search
+} MENU; //用有实际意义的标签来替换数字0-7
 
 typedef struct Student //类型首字母大写以和变量区分
 {
@@ -46,12 +53,12 @@ typedef struct Student //类型首字母大写以和变量区分
 	int iEnglish;
 	int iProgram;
 	int iScore;
-	struct Student  *pNext;
-}STU,*PSTU;	
+	struct Student *pNext;
+} STU, *PSTU;
 
-PSTU pHead = NULL;	//信息学生头结点
-PSTU pNew = NULL;	//待添加学生信息
-size_t iCount = 0;	//学生总数
+PSTU pHead = NULL; //信息学生头结点
+PSTU pNew = NULL;  //待添加学生信息
+size_t iCount = 0; //学生总数
 
 void Init();
 void MainMenu();
@@ -68,7 +75,7 @@ void Sort_Information();
 void Change_Information();
 void Delete_Information();
 void Search_Information();
-void Swap(PSTU stu1,PSTU stu2);
+void Swap(PSTU stu1, PSTU stu2);
 
 /*****************************************************************************
  函 数 名  : MainMenu
@@ -80,42 +87,42 @@ void Swap(PSTU stu1,PSTU stu2);
 *****************************************************************************/
 void MainMenu()
 {
-		switch (MenuSelect())	//菜单选择
-		{
-		case Exit:		//退出程序
-			printf("\n\t\t\t\t\t\t  欢迎下次使用！\n\n");
-			SaveData();
-			exit(0);	//退出或返回主菜单
-			break;
-		case Lessons:	//课程信息
-			Lessons_Information();
-			Quit();
-			break;
-		case Show:		//显示所有学生信息
-			Show_Information();
-			Quit();
-			break;
-		case Add:		//添加学生信息
-			Add_Information();
-			Quit();
-			break;
-		case Sort:		//对学生信息总分进行排序
-			Sort_Information();
-			Show_Information();
-			Quit();
-			break;
-		case Change:	//修改学生信息
-			Change_Information();
-			Quit();
-			break;
-		case Delete:	//删除学生信息
-			Delete_Information();
-			Quit();
-			break;
-		case Search:	//查询学生信息
-			Search_Information();
-			Quit();
-			break;
+	switch (MenuSelect()) //菜单选择
+	{
+	case Exit: //退出程序
+		printf("\n\t\t\t\t\t\t  欢迎下次使用！\n\n");
+		SaveData();
+		exit(0); //退出或返回主菜单
+		break;
+	case Lessons: //课程信息
+		Lessons_Information();
+		Quit();
+		break;
+	case Show: //显示所有学生信息
+		Show_Information();
+		Quit();
+		break;
+	case Add: //添加学生信息
+		Add_Information();
+		Quit();
+		break;
+	case Sort: //对学生信息总分进行排序
+		Sort_Information();
+		Show_Information();
+		Quit();
+		break;
+	case Change: //修改学生信息
+		Change_Information();
+		Quit();
+		break;
+	case Delete: //删除学生信息
+		Delete_Information();
+		Quit();
+		break;
+	case Search: //查询学生信息
+		Search_Information();
+		Quit();
+		break;
 	}
 }
 
@@ -175,8 +182,8 @@ int MenuSelect()
 		printf("\t\t\t\t   └────────────────────────────────────────────┘\n");
 		printf("\t\t\t\t\t\t  请您选择(0-7):");
 		c = getchar();
-	} while (c < '0' || c > '7' );
-	return c - '0';//ASCII码的0-7不是数字0-7，char转换成int
+	} while (c < '0' || c > '7');
+	return c - '0'; //ASCII码的0-7不是数字0-7，char转换成int
 }
 
 /*****************************************************************************
@@ -191,20 +198,22 @@ int MenuSelect()
 *****************************************************************************/
 void ReadData()
 {
-	FILE* fRead = fopen(STUDENT_FILE_NAME, "rt");
+	FILE *fRead = fopen(STUDENT_FILE_NAME, "rt");
 	if (fRead == NULL)
 	{
-		SaveData();	//文件不存在就创建文件
+		SaveData(); //文件不存在就创建文件
 		return;
 	}
-	rewind(fRead);	//将文件内部指针移回文件开头
+	rewind(fRead); //将文件内部指针移回文件开头
 	while (1)
 	{
-		pNew = (PSTU)malloc(sizeof(STU));	//申请一块内存
-		fread(pNew, sizeof(STU), 1, fRead);	//1 表示读取一个STU字节大小单元
-		if (feof(fRead)) break;				//文件末尾退出
+		pNew = (PSTU)malloc(sizeof(STU)); //申请一块内存
+		// fread(pNew, sizeof(STU), 1, fRead); //1 表示读取一个STU字节大小单元
+		fscanf(fRead, "%s %s %d %d %d %d", pNew->cNumber, pNew->cName, &pNew->iMath, &pNew->iEnglish, &pNew->iProgram, &pNew->iScore);
+		if (feof(fRead))
+			break; //文件末尾退出
 		//头插法插入数据，可用尾插法
-		pNew->pNext = pHead->pNext;			
+		pNew->pNext = pHead->pNext;
 		pHead->pNext = pNew;
 		pNew = NULL;
 		iCount++;
@@ -223,20 +232,38 @@ void ReadData()
 被调函数  :
 
 *****************************************************************************/
+// void SaveData()
+// {
+// 	FILE* fWrite = fopen(STUDENT_FILE_NAME, "wt");
+// 	if (fWrite == NULL)//文件创建失败
+// 	{
+
+// 		printf("保存失败...\n");
+// 		exit(0);
+// 	}
+// 	PSTU pCurrent = pHead->pNext;	//指向第一个节点 如果链表为 NULL pCurrent为 NULL
+// 	while (pCurrent != NULL)		//遍历所有学生信息
+// 	{
+// 		fwrite(pCurrent, sizeof(STU), 1, fWrite);
+// 		pCurrent = pCurrent->pNext;	//指向下一个节点
+// 	}
+// 	pCurrent = NULL;
+// 	fclose(fWrite);
+// }
 void SaveData()
 {
-	FILE* fWrite = fopen(STUDENT_FILE_NAME, "wt");
-	if (fWrite == NULL)//文件创建失败
+	FILE *fWrite = fopen(STUDENT_FILE_NAME, "wt");
+	if (fWrite == NULL) //文件创建失败
 	{
-		
+
 		printf("保存失败...\n");
 		exit(0);
 	}
-	PSTU pCurrent = pHead->pNext;	//指向第一个节点 如果链表为 NULL pCurrent为 NULL
-	while (pCurrent != NULL)		//遍历所有学生信息	
+	PSTU pCurrent = pHead->pNext; //指向第一个节点 如果链表为 NULL pCurrent为 NULL
+	while (pCurrent != NULL)	  //遍历所有学生信息
 	{
-		fwrite(pCurrent, sizeof(STU), 1, fWrite);
-		pCurrent = pCurrent->pNext;	//指向下一个节点
+		fprintf(fWrite, "%s\t\t%s\t%d\t%d\t%d\t\t%d\n", pCurrent->cNumber, pCurrent->cName, pCurrent->iMath, pCurrent->iEnglish, pCurrent->iProgram, pCurrent->iScore);
+		pCurrent = pCurrent->pNext; //指向下一个节点
 	}
 	pCurrent = NULL;
 	fclose(fWrite);
@@ -271,7 +298,7 @@ void Lessons_Information()
 	printf("\t\t\t╔════════════╦════════════╦════════════╦════════════╦════════════╗\n");
 	printf("\t\t\t║            ║            ║            ║            ║            ║\n");
 	printf("\t\t\t╚════════════╝════════════╝════════════╝════════════╝════════════╝\n");
-}//暂不支持更改课程表
+} //暂不支持更改课程表
 
 /*****************************************************************************
  函 数 名  : Quit
@@ -285,17 +312,18 @@ void Quit()
 {
 	char ch;
 	printf("\n\t ");
-
-	printf("\n\n\t\t\t\t要返回登录界面按任意键\t\t退出并保存数据请按Q键\n");
-	while(getchar() == '\n') 
-		;
 	ch = getchar();
-	if (ch == 'q' || ch == 'Q')	//Q键按下
+	printf("\n\n\t\t\t\t要返回登录界面按任意键\t\t退出并保存数据请按Q键\n");
+	while (ch == '\n')
+		ch = getchar();
+	if (ch == 'q' || ch == 'Q') //Q键按下
 	{
 		SaveData();
+		printf("\n\t\t\t\t\t数据保存成功  欢迎下次使用！\n\n");
 		exit(0);
 	}
-	else MainMenu();//重新进入主菜单
+	else
+		MainMenu(); //重新进入主菜单
 }
 
 /*****************************************************************************
@@ -309,16 +337,15 @@ void Quit()
 void Show_Information()
 {
 	Head();
-	PSTU pCurrent = pHead->pNext;	//指向第一个节点 如果链表为 NULL pCurrent为 NULL
+	PSTU pCurrent = pHead->pNext; //指向第一个节点 如果链表为 NULL pCurrent为 NULL
 	int index = 1;
 	printf("\t\t\t**********************本名单共有 %ld 名学生*********************\n\n\n", iCount);
 	printf("\t\t\t序号\t学号\t姓名\t高数\t英语\t程序设计\t总分\n\n");
-	while (pCurrent != NULL)	//遍历输出所有学生
+	while (pCurrent != NULL) //遍历输出所有学生
 	{
-		printf("\t\t\t %d\t %s\t %s\t %d\t %d\t %d\t\t%d\n", index, pCurrent->cNumber, pCurrent->cName, pCurrent->iMath
-			, pCurrent->iEnglish, pCurrent->iProgram, pCurrent->iScore);
-		pCurrent = pCurrent->pNext;	//指向下一个节点
-		index++;	//下标加加
+		printf("\t\t\t %d\t%s\t %s\t %d\t %d\t %d\t\t%d\n", index, pCurrent->cNumber, pCurrent->cName, pCurrent->iMath, pCurrent->iEnglish, pCurrent->iProgram, pCurrent->iScore);
+		pCurrent = pCurrent->pNext; //指向下一个节点
+		index++;					//下标加加
 	}
 	pCurrent = NULL;
 	printf("\n\n\n");
@@ -363,12 +390,12 @@ void Add_Information()
 *****************************************************************************/
 void Sort_Information()
 {
-	if (iCount < 2)		//一个学生不需要排序
+	if (iCount < 2) //一个学生不需要排序
 	{
-		return;	
+		return;
 	}
 	//从大到小排序 冒泡排序
-	PSTU pCurrent,pTemp;
+	PSTU pCurrent, pTemp;
 	STU Temp;
 	for (pCurrent = pHead->pNext; pCurrent != NULL; pCurrent = pCurrent->pNext)
 	{
@@ -401,18 +428,17 @@ void Change_Information()
 	printf("\t\t\t\t\t\t请输入学生学号：");
 	scanf("%s", ID);
 	//遍历学生信息
-	PSTU pCurrent = pHead->pNext;	//指向第一个节点 如果链表为 NULL pCurrent为 NULL
-	while (pCurrent != NULL)	//遍历所有学生
+	PSTU pCurrent = pHead->pNext; //指向第一个节点 如果链表为 NULL pCurrent为 NULL
+	while (pCurrent != NULL)	  //遍历所有学生
 	{
 		if (strcmp(pCurrent->cNumber, ID) == 0)
 		{
 			printf("\n\n\n\t\t\t\t\t要修改的学生信息...\n\n");
 			printf("\n\n\t\t\t\t\t学号\t姓名\t高数\t英语\t程序设计\t总分\n\n");
 			printf("\t\t\t\t\t %s\t %s\t %d\t %d\t %d\t\t%d\n", pCurrent->cNumber,
-				pCurrent->cName, pCurrent->iMath
-				, pCurrent->iEnglish, pCurrent->iProgram,pCurrent->iScore);
+				   pCurrent->cName, pCurrent->iMath, pCurrent->iEnglish, pCurrent->iProgram, pCurrent->iScore);
 			printf("\n\n\n\t\t\t\t\t是否修改该学生信息(y/n):");
-			if((operate = getchar()) == '\n')
+			if ((operate = getchar()) == '\n')
 				operate = getchar();
 			if (operate == 'y' || operate == 'Y')
 			{
@@ -432,13 +458,14 @@ void Change_Information()
 				pCurrent = NULL;
 				return;
 			}
-			else {
+			else
+			{
 				printf("\n\n\n\t\t\t\t\t修改失败...\n\n");
 				return;
 			}
 			return;
 		}
-		pCurrent = pCurrent->pNext;	//指向下一个节点
+		pCurrent = pCurrent->pNext; //指向下一个节点
 	}
 	pCurrent = NULL;
 	printf("\n\n\n\n\t\t\t\t\t   没有找到要查询的学生信息......\n\n");
@@ -461,37 +488,37 @@ void Delete_Information()
 	printf("\t\t\t\t\t\t请输入学生学号：");
 	scanf("%s", ID);
 	//遍历学生信息
-	PSTU pCurrent = pHead;	//指向头结点 
-	
-	while (pCurrent->pNext != NULL)	//遍历输出所有学生
+	PSTU pCurrent = pHead; //指向头结点
+
+	while (pCurrent->pNext != NULL) //遍历输出所有学生
 	{
 		if (strcmp(pCurrent->pNext->cNumber, ID) == 0)
 		{
 			//信息库里面有要删除的学生信息
 			printf("\n\n\n\t\t\t\t\t要删除的学生信息...\n\n");
 			printf("\n\n\t\t\t\t\t学号\t姓名\t高数\t英语\t程序设计\t总分\n\n");
-			printf("\t\t\t\t\t %s\t %s\t %d\t %d\t %d\t\t%d\n",pCurrent->pNext->cNumber, 
-				pCurrent->pNext->cName, pCurrent->pNext->iMath, pCurrent->pNext->iEnglish
-				, pCurrent->pNext->iProgram,pCurrent->pNext->iScore);
+			printf("\t\t\t\t\t %s\t %s\t %d\t %d\t %d\t\t%d\n", pCurrent->pNext->cNumber,
+				   pCurrent->pNext->cName, pCurrent->pNext->iMath, pCurrent->pNext->iEnglish, pCurrent->pNext->iProgram, pCurrent->pNext->iScore);
 			printf("\n\n\n\t\t\t\t\t是否删除该学生信息(y/n):");
-			if((operate = getchar()) == '\n')
+			if ((operate = getchar()) == '\n')
 				operate = getchar();
 			if (operate == 'y' || operate == 'Y')
 			{
 				//删除学生信息
-				PSTU pTemp = pCurrent->pNext;	//定义PSTU指针 pTemp 指向要删除的节点
-				pCurrent->pNext = pTemp->pNext;	
+				PSTU pTemp = pCurrent->pNext; //定义PSTU指针 pTemp 指向要删除的节点
+				pCurrent->pNext = pTemp->pNext;
 				free(pTemp);
 				iCount--;
 				printf("\n\n\n\t\t\t\t\t删除成功...\n\n");
 				return;
 			}
-			else{
+			else
+			{
 				printf("\n\n\n\t\t\t\t\t删除失败...\n\n");
 				return;
 			}
 		}
-		pCurrent = pCurrent->pNext;	//指向下一个节点
+		pCurrent = pCurrent->pNext; //指向下一个节点
 	}
 	printf("\n\n\n\n\t\t\t\t\t   没有找到要删除的学生信息......\n\n");
 }
@@ -512,19 +539,18 @@ void Search_Information()
 	printf("\t\t\t\t\t\t请输入学生学号：");
 	scanf("%s", ID);
 	//遍历学生信息
-	PSTU pCurrent = pHead->pNext;	//指向第一个节点 如果链表为 NULL pCurrent为 NULL
-	while (pCurrent != NULL)		//遍历所有学生
+	PSTU pCurrent = pHead->pNext; //指向第一个节点 如果链表为 NULL pCurrent为 NULL
+	while (pCurrent != NULL)	  //遍历所有学生
 	{
 		if (strcmp(pCurrent->cNumber, ID) == 0)
 		{
 			printf("\n\n\n\t\t\t\t\t要查询的学生信息...\n\n");
 			printf("\n\n\t\t\t\t\t学号\t姓名\t高数\t英语\t程序设计\t总分\n\n");
 			printf("\t\t\t\t\t %s\t %s\t %d\t %d\t %d\t\t%d\n", pCurrent->cNumber,
-				pCurrent->cName, pCurrent->iMath
-				, pCurrent->iEnglish, pCurrent->iProgram,pCurrent->iScore);
+				   pCurrent->cName, pCurrent->iMath, pCurrent->iEnglish, pCurrent->iProgram, pCurrent->iScore);
 			return;
 		}
-		pCurrent = pCurrent->pNext;	//指向下一个节点
+		pCurrent = pCurrent->pNext; //指向下一个节点
 	}
 	pCurrent = NULL;
 	printf("\n\n\n\n\t\t\t\t\t   没有找到要查询的学生信息......\n\n");
