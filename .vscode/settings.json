@@ -3,7 +3,8 @@
         "semaphore.h": "c",
         "test.C": "cpp",
         "typeinfo": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "iostream": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
